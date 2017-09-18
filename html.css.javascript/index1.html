@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ajax</title>
+</head>
+<body>
+
+
+	<form>
+		Nombre:<input type="text" id="nombre" name="nombre"><br>
+		Password:<input type="password" id="password1" name="pass"><br>
+		Password:<input type="password" id="password2" name="pass2">
+		<button type="button" onclick="Volver('index.html')">Volver</button>
+		<button type="button" onclick="Ajax()">Enviar</button>
+	</form>
+	
+	<div id="demo"> p*4>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+
+<script>
+	function Volver(a)
+	{
+		window.location.href = a;
+	}
+
+	function Ajax()
+	{
+		var ajax = new XMLHttpRequest();
+		var nombre = document.getElementById('nombre').value;//Falta cifrado
+		var password1 = document.getElementById('password1').value;//falta cifrado
+		var password2 = document.getElementById('password2').value;//falta cifrado
+		if(password1 == password2)
+		{
+				var json = {"nombre" : nombre, "password" : password1};
+				var dbParam = JSON.stringify(json);
+				console.log("funciona");
+		}
+		ajax.onreadystatechange = function()
+		{
+			if(this.status == 200 && this.readyState == 4 )
+			{
+				document.getElementById('demo').innerHTML = this.responseText;
+			}
+
+
+		};
+		var url = "registro.php";
+		ajax.open("POST", url, true);
+		ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		ajax.send("h="+dbParam);
+		console.log("OK");
+	}
+
+</script>
+
+
+</body>
+</html>
