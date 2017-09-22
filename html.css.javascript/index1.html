@@ -11,7 +11,8 @@
 		Password:<input type="password" id="password1" name="pass"><br>
 		Password:<input type="password" id="password2" name="pass2">
 		<button type="button" onclick="Volver('index.html')">Volver</button>
-		<button type="button" onclick="Ajax()">Enviar</button>
+		<button type="button" onclick="Ajax()">Enviar</button><br><br>
+		<textarea id="descripcion" rows="10" cols="40"></textarea>
 	</form>
 	
 	<div id="demo"> p*4>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -33,11 +34,12 @@
 		var nombre = document.getElementById('nombre').value;//Falta cifrado
 		var password1 = document.getElementById('password1').value;//falta cifrado
 		var password2 = document.getElementById('password2').value;//falta cifrado
+		var descripcion = document.getElementById('descripcion').value;
 		if(password1 == password2)
 		{
-				var json = {"nombre" : nombre, "password" : password1};
+				var json = {"nombre" : nombre, "password" : password1, "descripcion" : descripcion};
 				var dbParam = JSON.stringify(json);
-				console.log("funciona");
+				console.log(dbParam);
 		}
 		ajax.onreadystatechange = function()
 		{
