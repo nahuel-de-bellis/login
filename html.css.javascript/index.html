@@ -2,141 +2,171 @@
 <html>
 <head>
 	<title>Ajax</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<header>
-	<div id="fixed">
-		<h1>
-			Lorem
-		</h1>
-
-		<nav>
-			<ul>
-				<li>
-					uno
-				</li>
-				<li>
-					tres
-				</li>
-				<li>
-					dos
-				</li>
-
-			</ul>
-		</nav>
-</div>
-	</header>
-	<style>
-	#fixed
+<style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  </style>
+<style>
+	.cuadrado
 	{
-		position: fixed;
+
+  		display: flex;
+  		justify-content: center;
+  		align-items: center;
 	}
-		header h1,nav
-		{ 
-			
-			width:610px;
-			background-color:#1df6cb;
-		    display:inline-block; 
-		    height:50px;
-		    vertical-align: middle; 
-		} 
-		ul li{
-			display:inline;
-		}
 
-	</style>
 
-	<script>
+</style>
 
-		function Ajax()
-		{
-			var name = document.getElementById('nombre').value;
-			var pass = document.getElementById('pass').value;
-			var url = "envio.php"
-			var json = {"nombre" : name, "password" : pass};
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="index.html">NHDB</a>
+				</div>
+				<ul class="nav navbar-nav">
+					<li><a href="#">Login con Bootstrap</a></li>
+				</ul>
+			</div>
+		</nav>
 
-			dbParam = JSON.stringify(json);
-			var ajax = new XMLHttpRequest();
-			ajax.onreadystatechange = function() {
-	    		if (this.readyState == 4 && this.status == 200) 
-	    		{
-	    			var verifica = this.responseText; ///*this.response es la devolucion echo del script php*///
-	    		}
-	    	};	
-			ajax.open("POST", url, true);
-			ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			ajax.send("x="+dbParam);
 
-			if(verifica != 0)
+		
+		<div class="container" style="margin-top: 300px;">
+			<div class="row">
+				<div class="cuadrado" class="col-md-12">
+					<form>
+						<div class="form-group"><label>Nombre:</label><input type="text" id="nombre" name="nom" placeholder="Nombre"></div>
+						<div class="form-group"><label>ContraseÃ±a:</label><input type="password" id = "pass" name="pass" placeholder="ContraseÃ±a"></div>
+						<button type="button" id="btnAjax" class="btn btn-default"> Enviar </button>
+						<button type="button" id="btnUsers" class="btn btn-default">Usuarios</button> 
+						<button type ="button" onclick="register('index1.html')" class="btn btn-default"> Registrarse </button>
+					</form>	<br/>
+
+				</div>
+				
+			</div>
+			<div style="visibility: hidden;"></div>
+
+			<div class="row">
+				<p id ="demo" class="col-sm-4"></p>
+			</div>
+		</div>
+
+		<script>
+
+			(function ()
 			{
-				window.location.href = "#";
+					var btnAjax = document.getElementById('btnAjax');
+					btnAjax.addEventListener("click", function(){
+
+						var name = document.getElementById('nombre').value;
+						var pass = document.getElementById('pass').value;
+					
+						if(name == "" || name == " " || pass == "" || pass == " ")
+						{
+							alert("ERROR: campos vacios");
+						}
+						else
+						{
+							var url = "envio.php"
+							var json = {"nombre" : name, "password" : pass};
+
+							dbParam = JSON.stringify(json);
+							var ajax = new XMLHttpRequest();
+							ajax.onreadystatechange = function() {
+					    		if (this.readyState == 4 && this.status == 200) 
+					    		{
+					    			
+					    				var h = this.responseText; ///*this.response es la devolucion echo del script php*///;	
+					    				if(h == "Password or Name incorrect")
+					    				{
+					    					alert("Usuario no registrado");
+					    				}
+					    				else
+					    				{
+					    					window.location.href = h;
+					    				}
+					    			
+				    				
+					    		}
+					    	};	
+							ajax.open("POST", url, true);
+							ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+							ajax.send("x="+dbParam);
+
+
+						}
+
+					
+					});
+				
+				
+
+			})();
+
+			function register(a)
+			{
+				window.location.href = a;
+
 			}
-		}
 
-		function register(a)
-		{
-			window.location.href = a;
-
-		}
-
-		function readUsers()
-		{
-			var url = "ajax2.php";
-			var ajax = new XMLHttpRequest();
-			ajax.onreadystatechange = function()
+			(function ()
 			{
-				if(this.readyState == 4 && this.status == 200)
-				{
-					document.getElementById('demo').innerHTML = this.responseText;
-				}
+				var btnUsers = document.getElementById('btnUsers');
+				btnUsers.addEventListener("click", function()
+					{
+						var url = "ajax2.php";
+						var ajax = new XMLHttpRequest();
+						ajax.onreadystatechange = function()
+						{
+							if(this.readyState == 4 && this.status == 200)
+							{
+								document.getElementById('demo').innerHTML = this.responseText;
+							}
+						};
+						ajax.open("POST", url, true);
+						ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						ajax.send();
+					});
 
+			})();
 
-			};
-			ajax.open("POST", url, true);
-			//ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			ajax.send();
-
-		}
-
-	</script>
-	<br><br><br><br><br><br>
-	<form>
-		Nombre:<input type="text" id="nombre" name="nom"><br>
-		Password:<input type="password" id = "pass"name="pass">
-		<button type="button" onclick="Ajax()"> Ajax </button>
-		 <button type="button" onclick="readUsers()">Users</button> 
-		 <br><div align="center" style =  "width:25%"}><button type ="button" onclick="register('index1.html')"> Registrarse </button></div>
-	</form>
-	<p id ="demo">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	p*4>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	</p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	<br><br>
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	<br><br>
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	<br><br>
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	<br><br>
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	<br><br>
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	<br><br>
-
-	<br><br>
-</body>
+		</script>
+	</body>
 </html>
